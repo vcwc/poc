@@ -1,0 +1,26 @@
+---
+version: '3'
+services:
+
+# START SERVICE rest.kafka_connect
+  rest:
+    image: ${CONTECO_REGISTRY}${CONTECO_REALM_RUNTIME}/conteco.rest.kafka_connect:v1.0.3
+    environment: ['CONTECO_STATIC_REST_BASE_API_LOGGING=${REST_KAFKA_CONNECT_ENVIRONMENT_REST_BASE_CURL_LOGGING}','CONTECO_REST_BASE_PROTOCOL=${REST_KAFKA_CONNECT_ENVIRONMENT_REST_KAFKA_CONNECT_PROTOCOL}','CONTECO_REST_BASE_HOST=${REST_KAFKA_CONNECT_ENVIRONMENT_REST_KAFKA_CONNECT_HOST}','CONTECO_REST_BASE_PORT=${REST_KAFKA_CONNECT_ENVIRONMENT_REST_KAFKA_CONNECT_PORT}','CONTECO_REST_BASE_URLPREFIX=${REST_KAFKA_CONNECT_ENVIRONMENT_REST_KAFKA_CONNECT_PREFIX}']
+    command: [${REST_KAFKA_CONNECT_COMMAND}]
+    volumes: ['${CONTECO_STACKPREFIX}_rest_kafka_connect_data_volume:/conteco/pwd'${REST_KAFKA_CONNECT_VOLUMES_MAPPINGS}]
+    ports: []
+    networks: [${CONTECO_NETWORKLOCAL}_overlay]
+    deploy:
+      mode: ${REST_KAFKA_CONNECT_DEPLOY_MODE}
+      resources:
+        limits:
+          memory: '${REST_KAFKA_CONNECT_DEPLOY_RESOURCES_LIMITS_MEMORY}'
+        reservations:
+          memory: '${REST_KAFKA_CONNECT_DEPLOY_RESOURCES_RESERVATIONS_MEMORY}'
+      restart_policy: { condition: none }
+${REST_KAFKA_CONNECT_COMPOSE_EXTENSIONS}
+# END SERVICE rest.kafka_connect
+
+networks: {${CONTECO_NETWORKLOCAL}_overlay: { external: true }}
+volumes: {${CONTECO_STACKPREFIX}_rest_kafka_connect_data_volume: { external: true }}
+${CONTECO_DC_GLOBAL_COMPOSE_EXTENSIONS}

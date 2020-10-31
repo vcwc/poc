@@ -1,0 +1,23 @@
+- type: http
+  id: external_heartbeat-package-test
+  name: HeartBeat Package Test External
+  hosts: ["http://${VCW_STACK_HOSTNAME}:80"]
+  check.response.status: [404]
+  schedule: '@every 30s'
+  fields:
+    scope: module
+    type: external
+    service: traefik
+    area: gateway
+
+- type: http
+  id: internal_heartbeat-package-test
+  name: HeartBeat Package Test Internal
+  hosts: ["http://${VCW_STACK_HOSTNAME}:8080/dashboard"]
+  check.response.status: [200]
+  schedule: '@every 30s'
+  fields:
+    scope: module
+    type: internal
+    service: traefik
+    area: dashboard

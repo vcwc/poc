@@ -1,0 +1,25 @@
+---
+version: '3'
+services:
+
+# START SERVICE kafka_connect.base
+  kafka_connect:
+    image: ${CONTECO_REGISTRY}${CONTECO_REALM_RUNTIME}/conteco.kafka_connect.base:5.4.0
+    environment: ['CONNECT_BOOTSTRAP_SERVERS=kafka:9092','CONNECT_ZOOKEEPER_CONNECT=zookeeper:2181','CONNECT_REST_ADVERTISED_HOST_NAME=kafka_connect','CONNECT_REST_PORT=8083','CONNECT_GROUP_ID=${CONTECO_STACKPREFIX}_kafka_connect','CONNECT_CONFIG_STORAGE_TOPIC=${CONTECO_STACKPREFIX}_kafka_connect_configs','CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1','CONNECT_OFFSET_FLUSH_INTERVAL_MS=10000','CONNECT_OFFSET_STORAGE_TOPIC=${CONTECO_STACKPREFIX}_kafka_connect_offsets','CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1','CONNECT_STATUS_STORAGE_TOPIC=${CONTECO_STACKPREFIX}_kafka_connect_status','CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1','CONNECT_KEY_CONVERTER=org.apache.kafka.connect.storage.StringConverter','CONNECT_VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter','CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema_registry:8081','CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter','CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter','CONNECT_PRODUCER_CLASSPATH=/usr/share/java/monitoring-interceptors/monitoring-interceptors-5.4.0.jar','CONNECT_PRODUCER_INTERCEPTOR_CLASSES=io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor','CONNECT_CONSUMER_INTERCEPTOR_CLASSES=io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor','CONNECT_PLUGIN_PATH=/usr/share/java,/usr/share/confluent-hub-components','CONNECT_LOG4J_LOGGERS=org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR']
+    command: []
+    volumes: ['${CONTECO_STACKPREFIX}_kafka_connect_connect_secrets_volume:/etc/kafka-connect/secrets','${CONTECO_STACKPREFIX}_kafka_connect_secrets_volume:/etc/kafka/secrets','${CONTECO_STACKPREFIX}_kafka_connect_data_volume:/var/lib/kafka/data','${CONTECO_STACKPREFIX}_kafka_connect_jars_volume:/etc/kafka-connect/jars']
+    ports: [${KAFKA_CONNECT_PORTS}]
+    networks: [${CONTECO_NETWORKLOCAL}_overlay]
+    deploy:
+      mode: replicated
+      resources:
+        limits:
+          memory: '${KAFKA_CONNECT_DEPLOY_RESOURCES_LIMITS_MEMORY}'
+        reservations:
+          memory: '${KAFKA_CONNECT_DEPLOY_RESOURCES_RESERVATIONS_MEMORY}'
+${KAFKA_CONNECT_COMPOSE_EXTENSIONS}
+# END SERVICE kafka_connect.base
+
+networks: {${CONTECO_NETWORKLOCAL}_overlay: { external: true }}
+volumes: {${CONTECO_STACKPREFIX}_kafka_connect_connect_secrets_volume: { external: true },${CONTECO_STACKPREFIX}_kafka_connect_secrets_volume: { external: true },${CONTECO_STACKPREFIX}_kafka_connect_data_volume: { external: true },${CONTECO_STACKPREFIX}_kafka_connect_jars_volume: { external: true }}
+${CONTECO_DC_GLOBAL_COMPOSE_EXTENSIONS}
