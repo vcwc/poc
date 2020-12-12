@@ -9,7 +9,7 @@ services:
     command: []
     volumes: ['${CONTECO_STACKPREFIX}_kafka_connect_connect_secrets_volume:/etc/kafka-connect/secrets','${CONTECO_STACKPREFIX}_kafka_connect_secrets_volume:/etc/kafka/secrets','${CONTECO_STACKPREFIX}_kafka_connect_data_volume:/var/lib/kafka/data','${CONTECO_STACKPREFIX}_kafka_connect_jars_volume:/etc/kafka-connect/jars']
     ports: [${CONTECO_DC_KAFKA_CONNECT_PORTS}]
-    networks: [${CONTECO_NETWORKLOCAL}_overlay]
+    networks: [${VCW_STACK_GLOBAL_NETWORKLOCAL}_overlay]
     deploy:
       mode: replicated
       resources:
@@ -20,6 +20,6 @@ services:
 ${CONTECO_DC_KAFKA_CONNECT_COMPOSE_EXTENSIONS}
 # END SERVICE kafka_connect.base
 
-networks: {${CONTECO_NETWORKLOCAL}_overlay: { external: true }}
+networks: {${VCW_STACK_GLOBAL_NETWORKLOCAL}_overlay: { external: true }}
 volumes: {${CONTECO_STACKPREFIX}_kafka_connect_connect_secrets_volume: { external: true },${CONTECO_STACKPREFIX}_kafka_connect_secrets_volume: { external: true },${CONTECO_STACKPREFIX}_kafka_connect_data_volume: { external: true },${CONTECO_STACKPREFIX}_kafka_connect_jars_volume: { external: true }}
 ${CONTECO_DC_GLOBAL_COMPOSE_EXTENSIONS}

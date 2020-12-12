@@ -9,7 +9,7 @@ services:
     command: []
     volumes: []
     ports: [${CONTECO_DC_CONFLUENT_CC_PORTS}]
-    networks: [${CONTECO_NETWORKLOCAL}_overlay]
+    networks: [${VCW_STACK_GLOBAL_NETWORKLOCAL}_overlay]
     deploy:
       mode: replicated
       resources:
@@ -20,6 +20,6 @@ services:
 ${CONTECO_DC_CONFLUENT_CC_COMPOSE_EXTENSIONS}
 # END SERVICE confluent_cc.base
 
-networks: {${CONTECO_NETWORKLOCAL}_overlay: { external: true }}
+networks: {${VCW_STACK_GLOBAL_NETWORKLOCAL}_overlay: { external: true }}
 volumes: {}
 ${CONTECO_DC_GLOBAL_COMPOSE_EXTENSIONS}

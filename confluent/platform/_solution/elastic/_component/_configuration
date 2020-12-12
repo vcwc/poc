@@ -13,5 +13,5 @@ export MODECO_REST_ELASTICSEARCH_COMMAND="'.invoke selftest'"
 ##### START COMPONENT CONFIGURATION #####
 export SOLECO_MODULE="package.rest_elasticsearch"
 export SOLECO_MODULE_VERSION=""
-export SOLECO_HIDE_COMPONENT="true"
+export VCW_SOLUTON_HIDE_COMPONENT="true"
 ##### END COMPONENT CONFIGURATION #####
